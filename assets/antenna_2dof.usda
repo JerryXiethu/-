@@ -1,0 +1,75 @@
+#usda 1.0
+(
+    defaultPrim = "Antenna2DOF"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Antenna2DOF" (
+    prepend apiSchemas = ["PhysicsArticulationRootAPI"]
+)
+{
+    def Xform "Post" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI"]
+    )
+    {
+        double3 xformOp:translate = (0, 0, 0.8)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Cube "Geom" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            float3 xformOp:scale = (0.12, 0.12, 0.5)
+            uniform token[] xformOpOrder = ["xformOp:scale"]
+        }
+    }
+
+    def Xform "Dish" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI"]
+    )
+    {
+        double3 xformOp:translate = (0, 0, 1.13)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Cube "Geom" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            float3 xformOp:scale = (0.06, 1.1, 0.7)
+            uniform token[] xformOpOrder = ["xformOp:scale"]
+        }
+    }
+
+    def PhysicsRevoluteJoint "JointYaw" (
+        prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+    )
+    {
+        float drive:angular:physics:damping = 42
+        float drive:angular:physics:stiffness = 180
+        float drive:angular:physics:targetPosition = 0
+        uniform token drive:angular:physics:type = "force"
+        uniform token physics:axis = "Z"
+        rel physics:body1 = </Antenna2DOF/Post>
+        point3f physics:localPos0 = (0, 0, 0.8)
+        point3f physics:localPos1 = (0, 0, 0)
+    }
+
+    def PhysicsRevoluteJoint "JointPitch" (
+        prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+    )
+    {
+        float drive:angular:physics:damping = 48
+        float drive:angular:physics:stiffness = 220
+        float drive:angular:physics:targetPosition = 0
+        uniform token drive:angular:physics:type = "force"
+        uniform token physics:axis = "Y"
+        rel physics:body0 = </Antenna2DOF/Post>
+        rel physics:body1 = </Antenna2DOF/Dish>
+        point3f physics:localPos0 = (0, 0, 0.33)
+        point3f physics:localPos1 = (0, 0, 0)
+    }
+}
+

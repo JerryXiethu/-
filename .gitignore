@@ -1,0 +1,17 @@
+# Python virtual environment & caches (绝对不上传)
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Newton Viewer auto-generated UI layout file
+imgui.ini
+
+# Personal local study notes
+笔记/
+*.docx
+
+# OS / Editor files
+.DS_Store
+Thumbs.db
+.vscode/
